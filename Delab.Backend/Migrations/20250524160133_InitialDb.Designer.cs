@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Delab.Backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250505040345_InitialDb")]
+    [Migration("20250524160133_InitialDb")]
     partial class InitialDb
     {
         /// <inheritdoc />

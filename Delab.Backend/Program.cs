@@ -1,4 +1,5 @@
 using Delab.AccessData.Data;
+using Delab.Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
@@ -46,11 +47,25 @@ builder.Services.AddSwaggerGen(c =>
         });
 });
 
+builder.Services.AddTransient<SeedDb>(); // Agregamos el servicio para inicializar la base de datos
+
 // Conexion a Base de datos
 builder.Services.AddDbContext<DataContext>(x =>
     x.UseSqlServer("name=DefaultConnection", option => option.MigrationsAssembly("Delab.Backend")));
 
 var app = builder.Build();
+
+SeedData(app);
+
+void SeedData(WebApplication app)
+{
+    IServiceScopeFactory? scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+    using (IServiceScope? scope = scopedFactory?.CreateScope())
+    {
+        SeedDb? seedDb = scope?.ServiceProvider.GetService<SeedDb>();
+        seedDb?.SeedAsync().Wait();
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
