@@ -197,7 +197,7 @@ public class ManagersController : ControllerBase
         }, HttpContext.Request.Scheme, _configuration["UrlFrontend"])!.Replace("api/managers", "api/accounts");
 
         string subject = "Activacion de Cuenta";
-        string body = ($"De: NexxtPlanet" +
+        string body = ($"De: Digitales" +
             $"<h1>Email Confirmation</h1>" +
             $"<p>" +
             $"Su Clave Temporal es: <h2> \"{user.Pass}\"</h2>" +
