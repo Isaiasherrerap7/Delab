@@ -1,7 +1,14 @@
 using Delab.AccessData.Data;
 using Delab.Backend.Data;
+using Delab.Helpers;
+using Delab.Shared.Entities;
+using Delab.Shared.ResponsesSec;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -47,11 +54,52 @@ builder.Services.AddSwaggerGen(c =>
         });
 });
 
-builder.Services.AddTransient<SeedDb>(); // Agregamos el servicio para inicializar la base de datos
-
 // Conexion a Base de datos
 builder.Services.AddDbContext<DataContext>(x =>
     x.UseSqlServer("name=DefaultConnection", option => option.MigrationsAssembly("Delab.Backend")));
+
+// Sistema de seguridad autenticacion y autorizacion con el backend
+//Para realizar logueo de los usuarios
+builder.Services.AddIdentity<User, IdentityRole>(cfg =>
+{
+    //Agregamos Validar Correo para dar de alta al Usuario
+    cfg.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
+    cfg.SignIn.RequireConfirmedEmail = true;
+
+    cfg.User.RequireUniqueEmail = true;
+    cfg.Password.RequireDigit = false;
+    cfg.Password.RequiredUniqueChars = 0;
+    cfg.Password.RequireLowercase = false;
+    cfg.Password.RequireNonAlphanumeric = false;
+    cfg.Password.RequireUppercase = false;
+    //Sistema para bloquear por 5 minutos al usuario por intento fallido
+    cfg.Lockout.MaxFailedAccessAttempts = 3;
+    cfg.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);  //TODO: Cambiar Tiempo de Bloqueo a Usuarios
+    cfg.Lockout.AllowedForNewUsers = true;
+}).AddDefaultTokenProviders()  //Complemento Validar Correo
+  .AddEntityFrameworkStores<DataContext>();
+
+// Seguridad para la api controladores manejador jwtkey
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddCookie()
+    .AddJwtBearer(x => x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["jwtKey"]!)),
+        ClockSkew = TimeSpan.Zero
+    });
+
+//Configuracion de la Clase SendGridSetting para transportar los valores del AppSetting
+builder.Services.Configure<SendGridSettings>(builder.Configuration.GetSection("SendGrid"));
+
+builder.Services.AddTransient<SeedDb>(); // Agregamos el servicio para inicializar la base
+builder.Services.AddScoped<IUtilityTools, UtilityTools>(); // Agregamos el servicio UtilityTools
+builder.Services.AddScoped<IUserHelper, UserHelper>(); // Agregamos el servicio UserHelper
+builder.Services.AddScoped<IFileStorage, FileStorage>(); // Agregamos el servicio FileStorage
 
 var app = builder.Build();
 
