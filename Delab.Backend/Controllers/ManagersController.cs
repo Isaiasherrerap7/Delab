@@ -19,13 +19,14 @@ namespace Delab.Backend.Controllers;
 public class ManagersController : ControllerBase
 {
     private readonly DataContext _context;
-    private readonly UserHelper _userHelper;
+    private readonly IUserHelper _userHelper;
     private readonly IFileStorage _fileStorage;
     private readonly IConfiguration _configuration;
     private readonly IEmailHelper _emailHelper;
     private readonly string ImgRoute;
 
-    public ManagersController(DataContext context, UserHelper userHelper, IFileStorage fileStorage, IConfiguration configuration, IEmailHelper emailHelper)
+    public ManagersController(DataContext context, IUserHelper userHelper, IFileStorage fileStorage,
+        IConfiguration configuration, IEmailHelper emailHelper)
     {
         _context = context;
         _userHelper = userHelper;
@@ -196,7 +197,7 @@ public class ManagersController : ControllerBase
         }, HttpContext.Request.Scheme, _configuration["UrlFrontend"])!.Replace("api/managers", "api/accounts");
 
         string subject = "Activacion de Cuenta";
-        string body = ($"De: Digitales" +
+        string body = ($"De: NexxtPlanet" +
             $"<h1>Email Confirmation</h1>" +
             $"<p>" +
             $"Su Clave Temporal es: <h2> \"{user.Pass}\"</h2>" +
