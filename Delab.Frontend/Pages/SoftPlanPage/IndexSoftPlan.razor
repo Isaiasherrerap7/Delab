@@ -1,0 +1,87 @@
+﻿@page "/softplans"
+@using Delab.Frontend.Pages.Configuracion
+@inject IDialogService DialogService
+
+<MudCardContent>
+    <div class="shadow-lg mb-5">
+        <MudCard Outlined="true">
+            <MudCardContent>
+                <h3>Cobro Persuasivo</h3>
+
+                <div class="col-sm-12">
+                    <div class="row align-items-center">
+                        <div class="col-md-3 d-flex justify-content-start">
+                            <MudButton Variant="Variant.Filled"
+                                       EndIcon="@Icons.Material.Filled.AddCircle"
+                                       Color="Color.Dark" style="width:130px"
+                                       OnClick="OpenTipoDocumentoDialog">
+                                Manager
+                            </MudButton>
+                        </div>
+                        <div class="col-md-9 d-flex justify-content-end">
+                            <FilterComponent />
+                        </div>
+                    </div>
+                    <br />
+                </div>
+
+                <hr style="height:2px;border:none;color:#333;background-color:#333;" />
+
+                <!-- Tabla simulada -->
+                <div class="row">
+                    <div class="col-md-12 table-responsive">
+                        <MudSimpleTable Dense="true" Hover="true" Striped="true">
+                            <thead>
+                                <tr>
+                                    <th>Foto</th>
+                                    <th>Usuario</th>
+                                    <th>Corporación</th>
+                                    <th>Puesto</th>
+                                    <th>Activo</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <MudImage Src="https://via.placeholder.com/90x60" Width="90" Height="60" />
+                                    </td>
+                                    <td>John Doe</td>
+                                    <td>Example Corp</td>
+                                    <td>Manager</td>
+                                    <td>True</td>
+                                    <td>
+                                        <MudCheckBox Value="true" ReadOnly="true" />
+                                    </td>
+                                    <td><MudFab Size="Size.Small" EndIcon="@Icons.Material.Filled.Edit" Color="Color.Dark" /></td>
+                                    <td><MudFab Size="Size.Small" StartIcon="@Icons.Material.Filled.Checklist" Color="Color.Dark" /></td>
+                                    <td><MudFab Size="Size.Small" EndIcon="@Icons.Material.Filled.Delete" Color="Color.Error" /></td>
+                                </tr>
+                            </tbody>
+                        </MudSimpleTable>
+                    </div>
+                </div>
+
+                <hr style="height:2px;border:none;color:#333;background-color:#333;" />
+
+                <Pagination CurrentPage="1" SelectedPage="1" TotalPages="1" />
+            </MudCardContent>
+        </MudCard>
+    </div>
+</MudCardContent>
+
+@code {
+    private async Task OpenTipoDocumentoDialog()
+    {
+        var parameters = new DialogParameters
+            {
+                ["_version"] = "1.0.0"
+            };
+
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
+
+        DialogService.Show<TipoDocumentoDialog>("Gestión de Tipos de Documento", parameters, options);
+    }
+}
+
+
