@@ -19,4 +19,7 @@ public class Country
 
     // Relacion con el Estado o departamento/State
     public ICollection<State>? States { get; set; }
+
+    // Relacion con la Corporacion/Corporation
+    public ICollection<Corporation>? Corporations { get; set; }
 }
