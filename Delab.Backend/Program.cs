@@ -101,6 +101,18 @@ builder.Services.AddScoped<IUtilityTools, UtilityTools>(); // Agregamos el servi
 builder.Services.AddScoped<IUserHelper, UserHelper>(); // Agregamos el servicio UserHelper
 builder.Services.AddScoped<IFileStorage, FileStorage>(); // Agregamos el servicio FileStorage
 
+//Inicio de Area de los Serviciios
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin", builder =>
+    {
+        builder.WithOrigins("https://localhost:7100") // dominio de tu aplicación Blazor
+             .AllowAnyHeader()
+             .AllowAnyMethod()
+             .WithExposedHeaders(new string[] { "Totalpages", "Counting" });
+    });
+});
+
 var app = builder.Build();
 
 SeedData(app);
@@ -124,6 +136,9 @@ if (app.Environment.IsDevelopment())
     string swaggerUrl = "https://localhost:7254/swagger"; // URL de Swagger
     Task.Run(() => OpenBrowser(swaggerUrl));
 }
+
+//Llamar el Servicio de CORS
+app.UseCors("AllowSpecificOrigin");
 
 app.UseHttpsRedirection();
 

@@ -17,7 +17,7 @@ a, .btn-link {
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 .content {
@@ -111,4 +111,60 @@ code {
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
+}
+/* Esto es un comentario en CSS */
+/* Asegura altura completa del layout */
+html, body, .mud-height-full, .login-layout {
+    height: 100%;
+}
+
+/* Estilos específicos del layout de login */
+.left-pane {
+    background-color: #6c4eff; /* Color púrpura */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.right-pane {
+    background-color: #111827;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 2rem;
+}
+
+    /* Inputs en modo oscuro */
+    .right-pane .mud-input-outlined {
+        color: white;
+    }
+
+        .right-pane .mud-input-outlined .mud-input-label-outlined {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .right-pane .mud-input-outlined > .mud-input-adornment {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .right-pane .mud-input-outlined > input {
+            color: white;
+        }
+
+        .right-pane .mud-input-outlined > fieldset {
+            border-color: rgba(255, 255, 255, 0.23) !important;
+        }
+
+        .right-pane .mud-input-outlined:hover > fieldset {
+            border-color: rgba(255, 255, 255, 0.87) !important;
+        }
+
+    .right-pane .mud-icon-button {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+.mud-list-item-icon {
+    color: white;
 }

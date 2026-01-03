@@ -7,7 +7,7 @@ public partial class MainLayout
     private bool _drawerOpen = true;
 
     private string _icon = Icons.Material.Filled.DarkMode;
-    private bool _darkMode { get; set; } = true;
+    private bool _darkMode { get; set; } = false;
 
     private void DrawerToggle()
     {
